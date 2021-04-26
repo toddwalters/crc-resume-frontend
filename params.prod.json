@@ -1,0 +1,10 @@
+{
+  "Parameters": {
+    "Environment": "prod",
+    "AppName": "resume-frontend",
+    "DomainName": "resume.waltodders.com",
+    "WebS3BucketName": "resume-frontend-jz7i9b3c"    
+  },
+  "Tags": {},
+  "StackPolicy": {}
+}

@@ -1,0 +1,307 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Description: >
+  resume-frontend Deployment Resources
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: "CloudFront Parameters"
+      Parameters:
+          - WebS3BucketName
+          - CloudFrontAccessPrefix
+          - CloudFrontPriceClass
+    - Label:
+        default: "App Parameters"
+      Parameters:
+        - AppName
+        - Environment
+        - DomainName
+
+    ParameterLabels:
+      WebS3BucketName:
+        default: "SPA Bucket Name"
+      CloudFrontAccessPrefix:
+        default: "CloudFront Access Prefix"
+      CloudFrontPriceClass:
+        default: "CloudFront Price Class"
+      AppName:
+        default: "Application Name"
+      Environment:
+        default: "Environment Designation"
+      DomainName:
+        default: "Domain Name"
+
+Parameters:
+  Environment:
+    Type: String
+    Description: Account environment the stack is being deployed
+    AllowedValues:
+      - dev
+      - qa
+      - prod
+  AppName:
+    Type: String
+  DomainName:
+    Type: String
+    Description: Domain Name
+  WebS3BucketName:
+    Type: String
+  CloudFrontAccessPrefix:
+    Type: String
+    Default: PUBLIC
+    AllowedPattern: "[a-zA-Z0-9-]+"
+    ConstraintDescription: "must contain only alphanumerics and hyphens and cannot be empty"
+  CloudFrontPriceClass:
+        Type: String
+        Default: PriceClass_100
+        AllowedValues:
+            - PriceClass_100
+            - PriceClass_200
+            - PriceClass_All
+Mappings:
+  AccountEnvironment:
+    dev:
+      Subdomain: "dev."
+    qa:
+      Subdomain: "qa."
+    prod:
+      Subdomain: ""
+
+Resources:
+  WebsiteCloudFront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - !Join
+            - ""
+            - - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
+              - !Ref DomainName
+          - !Join
+            - ""
+            - - "www."
+              - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
+              - !Ref DomainName
+        DefaultCacheBehavior:
+          Compress: true
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: redirect-to-https
+          DefaultTTL: 60
+          MaxTTL: 120
+          MinTTL: 30
+          TargetOriginId: S3WebsiteOrigin
+        DefaultRootObject: index.html
+        Enabled: true
+        Comment: Super sweet cloudfront distrib
+        Origins:
+          - DomainName: !Sub
+            - "${BucketName}.s3.amazonaws.com"
+            - { BucketName: !Ref WebS3Bucket }
+            Id: S3WebsiteOrigin
+            OriginPath: !Join
+              - ""
+              - - /
+                - !Ref CloudFrontAccessPrefix
+            S3OriginConfig:
+              OriginAccessIdentity: !Join
+                - ""
+                - - origin-access-identity/cloudfront/
+                  - !Ref CloudFrontAccessIdentity
+        PriceClass: !Ref CloudFrontPriceClass
+        CustomErrorResponses:
+          -
+            ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: "/index.html"
+        ViewerCertificate:
+          AcmCertificateArn: !Ref ACMCertificate
+          MinimumProtocolVersion: TLSv1.2_2019
+          SslSupportMethod: sni-only
+
+  CloudFrontAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub "${AppName} CloudFront Origin Identity"
+
+  CloudFrontCNAME:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      Comment: DNS hostnames that should alias the CloudFront Distribution
+      HostedZoneId:
+        Fn::ImportValue: !Join
+          - ''
+          - - 'PublicHostedZoneId-'
+            - !Join
+              - ":"
+              - !Split
+                - '.'
+                - !Join
+                  - ''
+                  - - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
+                    - !Ref DomainName
+
+      RecordSets:
+        - Name: !Join
+            - ""
+            - - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
+              - !Ref DomainName
+          Type: A
+          AliasTarget:
+            DNSName: !GetAtt WebsiteCloudFront.DomainName
+            HostedZoneId: Z2FDTNDATAQYW2
+        - Name: !Join
+            - ""
+            - - "www."
+              - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
+              - !Ref DomainName
+          Type: A
+          AliasTarget:
+            DNSName: !GetAtt WebsiteCloudFront.DomainName
+            HostedZoneId: Z2FDTNDATAQYW2
+
+  ACMCertificate:
+    Type: "AWS::CertificateManager::Certificate"
+    Properties:
+      DomainName: !Join
+        - ""
+        - - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
+          - !Ref DomainName
+      SubjectAlternativeNames:
+        - !Join
+            - ""
+            - - "www."
+              - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
+              - !Ref DomainName
+      DomainValidationOptions:
+        - DomainName: !Join
+            - ""
+            - - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
+              - !Ref DomainName
+          HostedZoneId:
+            Fn::ImportValue: !Join
+              - ''
+              - - 'PublicHostedZoneId-'
+                - !Join
+                  - ":"
+                  - !Split
+                    - '.'
+                    - !Join
+                      - ''
+                      - - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
+                        - !Ref DomainName
+      ValidationMethod: DNS
+
+  WebS3Bucket:
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub ${WebS3BucketName}
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+        - Id: Delete Old Versions
+          Status: Enabled
+          Prefix: ''
+          NoncurrentVersionExpirationInDays: 35
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+
+  WebS3BucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket:
+        !Ref WebS3Bucket
+      PolicyDocument:
+        Statement:
+          -
+              Sid: Deny_AES256_Except_CloudFront_Prefix
+              Effect: Deny
+              Principal: '*'
+              Action: 's3:PutObject*'
+              NotResource: !Sub 'arn:aws:s3:::${WebS3BucketName}/PUBLIC/*'
+              Condition:
+                  StringEquals:
+                      's3:x-amz-server-side-encryption': AES256
+          -
+              Sid: SSL Transit
+              Effect: Deny
+              Principal: '*'
+              Action: 's3:*'
+              Resource: !Sub 'arn:aws:s3:::${WebS3BucketName}/*'
+              Condition:
+                  Bool:
+                      'aws:SecureTransport': 'False'
+          -
+              Sid: ReadWriteAccess_EntireBucket
+              Effect: Allow
+              Principal:
+                  AWS:
+                      - Fn::ImportValue: !Sub "${AWS::StackName}-CodeBuildRoleArn"
+                      - Fn::ImportValue: !Sub "${AWS::StackName}-CloudFormationRoleArn"
+              Action:
+                  - 's3:GetObject*'
+                  - 's3:PutObject*'
+                  - 's3:DeleteObject*'
+              Resource: !Sub 'arn:aws:s3:::${WebS3BucketName}/*'
+          -
+              Sid: PermissionScope
+              Effect: Deny
+              Principal: '*'
+              Action:
+                  - 's3:PutObject*'
+                  - 's3:GetObject*'
+                  - 's3:DeleteObject*'
+              Resource:
+                  - !Sub 'arn:aws:s3:::${WebS3BucketName}'
+                  - !Sub 'arn:aws:s3:::${WebS3BucketName}/*'
+              Condition:
+                  'ForAnyValue:ArnNotEquals':
+                      'aws:PrincipalArn':
+                          - Fn::Sub:
+                              - arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CFOAIU}
+                              - { CFOAIU: !Ref CloudFrontAccessIdentity }
+                          - Fn::ImportValue: !Sub "${AWS::StackName}-CodeBuildRoleArn"
+                          - Fn::ImportValue: !Sub "${AWS::StackName}-CloudFormationRoleArn"
+          -
+              Sid: CloudFrontReadAccess
+              Effect: Allow
+              Principal:
+                CanonicalUser: !GetAtt CloudFrontAccessIdentity.S3CanonicalUserId
+              Action: 's3:GetObject*'
+              Resource: !Sub 'arn:aws:s3:::${WebS3BucketName}/PUBLIC/*'
+
+Outputs:
+  CloudFrontUrl:
+    Value: !Sub
+      - "https://${Domain}"
+      - { Domain: !GetAtt "WebsiteCloudFront.DomainName" }
+  CloudFrontId:
+    Value: !Ref WebsiteCloudFront
+  WebBucket:
+    Description: Location to put SPA static files
+    Value: !Join
+      - ""
+      - - !Ref WebS3Bucket
+        - "/"
+        - !Ref CloudFrontAccessPrefix
+  Environment:
+    Value: !Ref Environment
