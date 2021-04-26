@@ -1,5 +1,5 @@
 
-const url='https://api.dev.resume.waltodders.com/dev/counter';
+const url='https://api.qa.resume.waltodders.com/qa/counter';
 
 var count = " ";
 
