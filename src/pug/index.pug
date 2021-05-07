@@ -1,0 +1,313 @@
+doctype html
+html(lang='en')
+
+    head
+
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        meta(name='description', content='')
+        meta(name='author', content='')
+
+        title Resume - Todd Walters
+
+        link(rel='icon', type='image/x-icon', href='assets/img/favicon.ico')
+
+        // Font Awesome icons (free version)
+        script(src='https://use.fontawesome.com/releases/v5.13.0/js/all.js', crossorigin='anonymous')
+
+        // Google fonts
+        link(href='https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700', rel='stylesheet', type='text/css')
+        link(href='https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i', rel='stylesheet', type='text/css')
+
+        // Core theme CSS (includes Bootstrap)
+        link(href='css/styles.css', rel='stylesheet')
+
+    body#page-top
+
+        // Navigation
+        nav#sideNav.navbar.navbar-expand-lg.navbar-dark.bg-primary.fixed-top
+            a.navbar-brand.js-scroll-trigger(href='#page-top')
+                span.d-block.d-lg-none Todd Walters
+                span.d-none.d-lg-block
+                    img.img-fluid.img-profile.rounded-circle.mx-auto.mb-2(src='assets/img/profile.jpg', alt='')
+            button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            #navbarSupportedContent.collapse.navbar-collapse
+                ul.navbar-nav
+                    li.nav-item
+                        a.nav-link.js-scroll-trigger(href='#about') About
+                    li.nav-item
+                        a.nav-link.js-scroll-trigger(href='#experience') Experience
+                    li.nav-item
+                        a.nav-link.js-scroll-trigger(href='#education') Education
+                    li.nav-item
+                        a.nav-link.js-scroll-trigger(href='#skills') Skills
+                    li.nav-item
+                        a.nav-link.js-scroll-trigger(href='#awards') Certifications
+
+        // Page Content
+        .container-fluid.p-0
+
+            // About
+            section#about.resume-section
+                .resume-section-content
+                    h1.mb-0
+                        | Todd
+                        span.text-primary Walters
+                    .subheading.mb-5
+                        | Indianapolis, IN
+                        // a(href='mailto:name@email.com') name@email.com
+                    p.lead.mb-5
+                        | Enterprise IT Infrastructure professional with over twenty years of experience working in the Life Sciences industry, developing, deploying and managing IT solutions across the Enterprise IT Landscape. I am a Senior Cloud Engineer focused on the creation of infrastructure and developer-enabling cloud solutions and services in AWS and GCP. I have broad and versatile experience across Amazon Web Services, Google Cloud Platform, Red Hat OpenShift Container Platform, VMware vSphere, and Red Hat Enterprise Linux, with a focus on the creation of on-premises private, as well as public and hybrid cloud, IaaS and PaaS services and solutions in highly regulated and quality controlled environments. Strong information technology professional with a M.S. in Computer and Information Technology Management from Purdue University, Master of Business Administration - MBA from Anderson University Falls School of Business and Bachelor of Science in Management Information Systems from the Purdue University Krannert School of Management.
+                    .social-icons
+                        a.social-icon(href='https://linkedin.com/in/toddwalters/')
+                            i.fab.fa-linkedin-in
+                        a.social-icon(href='https://github.com/toddwalters')
+                            i.fab.fa-github
+                        a.social-icon(href='https://twitter.com/toddwalters')
+                            i.fab.fa-twitter
+                        // a.social-icon(href='#')
+                        //     i.fab.fa-facebook-f
+
+            hr.m-0
+
+            // Experience
+            section#experience.resume-section
+                .resume-section-content
+                    h2.mb-5 Experience
+
+                    .d-flex.flex-column.flex-md-row.justify-content-between.mb-5
+                        .flex-grow-1
+                            h3.mb-0 Cloud Engineer
+                            .subheading.mb-3 Eli Lilly & Company
+                            p Responsibilities and experiences include:
+                            ul
+                                li Experience defining, documenting, qualifying, installing and configuring the cloud foundational services and capabilities required for Enterprise AWS and GCP deployments.
+                                li Led large scale and complex cloud service development projects including the deployment of an AWS account provisioning solution that automated AWS account creation, deployment and configuration based on corporate and industry standard cloud security, quality, and compliance standards and guardrails.
+                                li Responsible for management and oversight of Enterprise GCP cloud foundation, including project deployment, configuration, service enablement and access.
+                                li Partnering with development teams on designing and deploying cloud native architecture focused solutions within AWS and GCP. 
+                                li Hands on experience in deploying and configuring Enterprise cloud solutions within AWS and GCP.
+                                li Development and deployment of AWS CloudFormation templates to meet Infrastructure as Code and application deployment requirements.
+                                li Development and deployment of AWS Lambda focused automation for configuration governance and security compliance.
+                                li Experience within AWS and GCP in the creation of IAM Roles, Policies, and Boundaries to enable least privilege access, as well as, the ability to allow service admin autonomy while at the same protecting foundational resources and guardrails. 
+                                li Consult and advise on the implementation of cloud practices across the Eli Lilly Global IT landscape.
+                                li Promote, mentor and educate the Eli Lilly IT community on cloud adoption, operating guidelines, principles, and cloud services and solutions
+                                li Serve as an AWS and GCP cloud services evangelist. Providing education, guidance and consultation to teams related to current and future state of our AWS service offering.
+                                li Partner effectively with Information Security, Enterprise Data Services, Network and Service Management teams to ensure delivery of reliable and secure cloud services in AWS and GCP.
+                        .flex-shrink-0
+                            span.text-primary March 2018 - Present
+
+                    .d-flex.flex-column.flex-md-row.justify-content-between.mb-5
+                        .flex-grow-1
+                            h3.mb-0 PaaS/CaaS Engineer
+                            .subheading.mb-3 Eli Lilly & Company
+                            p PaaS/CaaS Engineer and Service Owner responsible for the technical design, development and implementation of on-premise Platform-as-a-Service and Container-as-a-Service solutions. I was responsible for researching, reviewing, evaluating, and testing on-premise Linux and Windows PaaS/CaaS solutions to identify there fit within our portfolio of on-premise application development solutions.
+                            p I lead a global cross-functional team of engineering, development, and operations team members focused on the development and support of an on-premise OpenShift Container Platform Service. The team consults, guides and educates business unit IT teams on new cloud native application development as well as re-platforming applications from legacy platforms to a modern application container based platform running on OpenShift.
+                            p Primary Job Responsibilities:      
+                            ul
+                                li Lead the implementation of an Enterprise PaaS/CaaS Orchestration solution based on the Red Hat OpenShift Container Platform.
+                                li Provide mentoring and guidance to internal app dev teams leveraging the OpenShift platform for next-generation application development.
+                                li Promote and evangelize the use of the on-premise CaaS/PaaS solutions to internal business unit IT groups focused application development.
+                        .flex-shrink-0
+                            span.text-primary March 2016 - March 2018
+
+                    .d-flex.flex-column.flex-md-row.justify-content-between.mb-5
+                        .flex-grow-1
+                            h3.mb-0 Virtualization Engineer
+                            .subheading.mb-3 Eli Lilly & Company
+                            p Responsibilities and experiences include:
+                            ul
+                                li I owned, created and deployed a new internal VMware VSAN service offering within the virtualization services team. I authored the requirements, configuration and design documentation for the service, as well as, the service operational support documentation. I drove and championed the use of the VSAN based solutions within all new small site deployments requiring virtualization services infrastructure.
+                                li I conducted a VMware Virtual Distributed Switch Proof of Concept evaluation to determine the feasibility and challenges associated with migrating from VMware Standard Switches to Distributed Switches within our global ESXi environment.
+                                li Responsible for POC testing of VMware vCenter Operations Manager for View software to investigate possibility of the tool to function as centralized resource for View infrastructure capacity, performance and event monitoring and management.
+                                li Service delivery manager for a custom developed IaaS offering and served as the liaison between IaaS portal developers and internal Global IT with regards to ongoing development, improvement of IaaS service capabilities and I oversaw the global rollout of the IaaS offering.
+
+                        .flex-shrink-0
+                            span.text-primary Mar 2013 - Mar 2016
+
+                    .d-flex.flex-column.flex-md-row.justify-content-between
+                        .flex-grow-1
+                            h3.mb-0 Hosting and Cloud Services Business/Financial Analyst
+                            .subheading.mb-3 Eli Lilly & Company
+                            p Global Platform Hosting Services Business and Financial analyst. Created and maintained a global internal unit cost and pricing model associated with server deployments, as well as storage and network resource allocation across internal business units consuming IT resource. Developed and managed the volume and project driven growth charge-back/show-back model. Tracked projected and actual OPEX and CAPEX related to virtual desktop and servers, network and storage resources. Owned and developed business cases based on NPV, ROI and TCO analysis of major project proposals. Owned capital asset review and retirement for the department.
+                            p Global Service Delivery Manager for Enterprise Systems Management (ESM) and SOA Gateway Services teams. Developed and implemented a ESM project work tracking and status update process. Partnered with ESM Services supplier on service strategy review and development efforts. I was the primary internal departmental customer relationship and issue escalation contact for both the ESM and SOA Gateway services team. Provided quality, process and procedure creation guidance to SOA Gateway Services support team as they worked toward establishing the SOA Gateway offering as a new IT service.
+                        .flex-shrink-0
+                            span.text-primary Mar 2010 - Mar 2013
+
+                    .d-flex.flex-column.flex-md-row.justify-content-between
+                        .flex-grow-1
+                            h3.mb-0 UNIX/Linux Systems Administrator
+                            .subheading.mb-3 Eli Lilly & Company
+                            p Lead the design and creation of a Red Hat Linux high availability clustering service offering. Compared Veritas HA and Red Hat HA solutions. Created and maintained automated installation and configuration script of Veritas Cluster software onto Red Hat Linux systems. Created NetIQ based monitoring solution for HA Cluster events leveraging trigger scripts to generate NetIQ based incidents and trouble-tickets for HA Cluster failures.
+                            p Solaris UNIX performance management subject matter expert for the team. Veritas Volume Management subject matter expert. Created script to automate Veritas Volume Manager upgrades on Sun Solaris UNIX systems.
+                        .flex-shrink-0
+                            span.text-primary Mar 1999 - Mar 2010
+
+                    .d-flex.flex-column.flex-md-row.justify-content-between
+                        .flex-grow-1
+                            h3.mb-0 Service/Sales Engineer
+                            .subheading.mb-3 CommNet Plus, Inc.
+                            p I served as the lead service and sales engineer associated with Checkpoint Firewall software within corporate and educational accounts. I provided on-site and remote support of existing firewall installations, including configuration management and facilitating software upgrades. I also served as the lead service and sales engineer associated with Sun Microsystems hardware. I was responsible for troubleshooting and upgrading various Sun Microsystems platforms both within the company and in off-site accounts. The systems ranged in size from Sparc5 workstations to Enterprise 6000 servers and my responsibilities included OS upgrades as well as component replacement and integration.
+                        .flex-shrink-0
+                            span.text-primary Aug 1997 - Feb 1999
+
+            hr.m-0
+
+            // Education
+            section#education.resume-section
+                .resume-section-content
+                    h2.mb-5 Education
+
+                    .d-flex.flex-column.flex-md-row.justify-content-between.mb-5
+                        .flex-grow-1
+                            h3.mb-0 Purdue University
+                            .subheading.mb-3 Master of Science
+                            div Computer and Information Technology Management
+                            // p GPA: 
+                        .flex-shrink-0
+                            span.text-primary August 2009 - May 2012
+
+                    .d-flex.flex-column.flex-md-row.justify-content-between
+                        .flex-grow-1
+                            h3.mb-0 Anderson University
+                            .subheading.mb-3 MBA
+                            div Falls School of Business
+                            br
+                            br
+                            // p GPA: 
+                        .flex-grow-0
+                            span.text-primary August 2009 - May 2012
+
+                    .d-flex.flex-column.flex-md-row.justify-content-between
+                        .flex-grow-1
+                            h3.mb-0 Purdue University
+                            .subheading.mb-3 Bachelor of Science
+                            div Krannert School of Management
+                            div Major: Industrial Management
+                            div Minor: Management Information Systems
+                            // p GPA: 3.56
+                        .flex-shrink-0
+                            span.text-primary August 1989 - May 1994
+
+            hr.m-0
+
+            // Skills
+            section#skills.resume-section
+                .resume-section-content
+                    h2.mb-5 Skills
+                    .subheading.mb-3 Programming Languages & Tools
+                    ul.list-inline.dev-icons
+                        li.list-inline-item
+                            i.fab.fa-html5
+                        li.list-inline-item
+                            i.fab.fa-css3-alt
+                        li.list-inline-item
+                            i.fab.fa-react
+                        li.list-inline-item
+                            i.fab.fa-sass
+                        li.list-inline-item
+                            i.fab.fa-aws
+                        li.list-inline-item
+                            i.fab.fa-python
+                        li.list-inline-item
+                            i.fab.fa-node-js
+                        li.list-inline-item
+                            i.fab.fa-npm
+                    .subheading.mb-3 Enthusiastic About
+                    ul.fa-ul.mb-0
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | Amazon Web Services, Google Cloud Platform, and Azure
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | Infrastructure as Code
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | Container Services
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | Cloud Native Application Development
+                    p
+                    .subheading.mb-3 Conversant In
+                    ul.fa-ul.mb-0
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | OpenShift Container Platform
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | VMware vSphere
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | Linux (RHEL & Ubuntu)
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | HTML/CSS
+                    p
+                    .subheading.mb-3 Knowledgeable About
+                    ul.fa-ul.mb-0
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | Programming/Scripting: Bash, Python & JavaScript
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | Infrastructure as Code: CloudFormation & Terraform
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | CI/CD Tools: GitHub, GitHub Actions, AWSCodeBuild, & AWS CodePipeline
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | Serverless Solutions: AWS Lambda, AWS Serverless Application Model & Amazon DynamoDB
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | Container Services: Docker, Red Hat OpenShift
+                        li
+                            span.fa-li
+                                i.fas.fa-check
+                            | Cloud Network Services: VPC configuration, Subnetting, Routing, Load Balancing, DNS, Proxy Services & Firewalls
+
+            hr.m-0
+
+            // Awards & Certifications
+            section#awards.resume-section
+                .resume-section-content
+                    h2.mb-5 Awards & Certifications
+                    img(src='assets/img/awsbadge_SolArchitect-Associate.png', alt='', href='https://www.youracclaim.com/badges/bbba96a7-702f-4559-81fe-e3421ec2717a')
+                    img(src='assets/img/awsbadge_developer-associate.png', alt='', href='https://www.youracclaim.com/badges/12ebeb21-1569-4975-82f6-18ff0b1a7e8c')
+                    img(src='assets/img/awsbadge_security-specialty.png', alt='', href='https://www.youracclaim.com/badges/6595e363-e72b-46ec-a516-28ba961e1535')
+                    img(src='assets/img/azure-fundamentals.png', alt='', href='https://www.youracclaim.com/badges/8f2e8410-5cc5-489a-866b-a536d82b51f9')
+                    img(src='assets/img/seal-cspo.png', alt='', href='ttp://bcert.me/srwrudlef') 
+
+            // Footer
+            section.footer
+                .footer
+                    i.fas.fa-users
+                    | Total Visitors:
+                    a#visits
+                    p
+                            i.fas.fa-cloud
+
+        // Bootstrap core JS
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js')
+
+        // Third party plugin JS
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js')
+
+        // Core theme JS
+        script(src='js/scripts.js')
+
+        // Counter JS
+        script(src='js/visitors.js')
