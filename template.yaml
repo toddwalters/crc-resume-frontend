@@ -69,9 +69,14 @@ Mappings:
     prod:
       Subdomain: ""
 
+Conditions:
+  IsProdEnvironment: !Equals [ !Ref Environment, 'prod' ]
+  IsNotProdEnvironment: !Not [ !Equals [!Ref Environment, 'prod']]
+
 Resources:
   WebsiteCloudFront:
     Type: AWS::CloudFront::Distribution
+    Condition: IsProdEnvironment
     Properties:
       DistributionConfig:
         Aliases:
@@ -127,6 +132,75 @@ Resources:
           MinimumProtocolVersion: TLSv1.2_2019
           SslSupportMethod: sni-only
 
+  WebsiteCloudFrontDev:
+    Type: AWS::CloudFront::Distribution
+    Condition: IsNotProdEnvironment
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - !Join
+            - ""
+            - - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
+              - !Ref DomainName
+          - !Join
+            - ""
+            - - "www."
+              - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
+              - !Ref DomainName
+        DefaultCacheBehavior:
+          Compress: true
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: redirect-to-https
+          DefaultTTL: 60
+          MaxTTL: 120
+          MinTTL: 30
+          TargetOriginId: S3WebsiteOrigin
+        DefaultRootObject: index.html
+        Enabled: true
+        Comment: Super sweet cloudfront distrib
+        Origins:
+          - DomainName: !Sub
+            - "${BucketName}.s3.amazonaws.com"
+            - { BucketName: !Ref WebS3Bucket }
+            Id: S3WebsiteOrigin
+            OriginPath: !Join
+              - ""
+              - - /
+                - !Ref CloudFrontAccessPrefix
+            S3OriginConfig:
+              OriginAccessIdentity: !Join
+                - ""
+                - - origin-access-identity/cloudfront/
+                  - !Ref CloudFrontAccessIdentity
+        PriceClass: !Ref CloudFrontPriceClass
+        CustomErrorResponses:
+          -
+            ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: "/index.html"
+        ViewerCertificate:
+          AcmCertificateArn:
+            Fn::ImportValue: !Join
+              - ''
+              - - 'wwwACMARN-'
+                - !Join
+                  - ":"
+                  - !Split
+                    - '.'
+                    - !Join
+                      - ''
+                      - - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
+                        - !Ref DomainName
+          MinimumProtocolVersion: TLSv1.2_2019
+          SslSupportMethod: sni-only
+
   CloudFrontAccessIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
@@ -149,7 +223,6 @@ Resources:
                   - ''
                   - - !FindInMap [AccountEnvironment, !Ref Environment, Subdomain]
                     - !Ref DomainName
-
       RecordSets:
         - Name: !Join
             - ""
@@ -157,7 +230,7 @@ Resources:
               - !Ref DomainName
           Type: A
           AliasTarget:
-            DNSName: !GetAtt WebsiteCloudFront.DomainName
+            DNSName: !If [IsProdEnvironment, !GetAtt WebsiteCloudFront.DomainName, !GetAtt WebsiteCloudFrontDev.DomainName]
             HostedZoneId: Z2FDTNDATAQYW2
         - Name: !Join
             - ""
@@ -166,11 +239,12 @@ Resources:
               - !Ref DomainName
           Type: A
           AliasTarget:
-            DNSName: !GetAtt WebsiteCloudFront.DomainName
+            DNSName: !If [IsProdEnvironment, !GetAtt WebsiteCloudFront.DomainName, !GetAtt WebsiteCloudFrontDev.DomainName]
             HostedZoneId: Z2FDTNDATAQYW2
 
   ACMCertificate:
     Type: "AWS::CertificateManager::Certificate"
+    Condition: IsProdEnvironment
     Properties:
       DomainName: !Join
         - ""
@@ -291,11 +365,17 @@ Resources:
 
 Outputs:
   CloudFrontUrl:
+    Condition: IsProdEnvironment
     Value: !Sub
       - "https://${Domain}"
       - { Domain: !GetAtt "WebsiteCloudFront.DomainName" }
+  CloudFrontUrlDev:
+    Condition: IsNotProdEnvironment
+    Value: !Sub
+      - "https://${Domain}"
+      - { Domain: !GetAtt "WebsiteCloudFrontDev.DomainName" }
   CloudFrontId:
-    Value: !Ref WebsiteCloudFront
+    Value: !If [IsProdEnvironment, !Ref WebsiteCloudFront, !Ref WebsiteCloudFrontDev]
   WebBucket:
     Description: Location to put SPA static files
     Value: !Join
