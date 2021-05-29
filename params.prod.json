@@ -3,7 +3,7 @@
     "Environment": "prod",
     "AppName": "resume-frontend",
     "DomainName": "resume.waltodders.com",
-    "WebS3BucketName": "resume-frontend-9emxq8pc7wx7"    
+    "WebS3BucketName": "resume-frontend-ddmsf62bw2wr"    
   },
   "Tags": {},
   "StackPolicy": {}
