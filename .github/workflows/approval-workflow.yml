@@ -2,8 +2,6 @@ name: Team Awesome's approval workflow
 on: pull_request_review
 jobs:
   labelWhenApproved:
-    environment:
-      name: development
     runs-on: ubuntu-latest
     steps:
     - name: Label when approved
