@@ -5,55 +5,38 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ main ]
   pull_request:
-    branches: [ dev ]
+    branches: [ main ]
 
 jobs:
   build:
-    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup node 12
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: '12.x'
-
-      - name: Cache node modules
-        id: cache-node
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies
-        if: steps.cache-node.outputs.cache-hit != 'true'
+      - name: npm install and build webpack
         run: |
-          npm install --silent
-      - name: Build site
-        run:  npm run build
+          npm install
+          npm run build
   test:
     runs-on: ubuntu-latest
       - uses: actions/upload-artifact@master
     needs: build
-      name: webpack artifacts
-      path: public/
+          name: webpack artifacts
+          path: public/
       matrix:
         os: [ubuntu-latest]
         node-version: [12.x, 14.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: |
-          npm install
-          npm test
-        env:
-          CI: true
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: |
+        npm install
+        npm test
+      env:
+        CI: true
