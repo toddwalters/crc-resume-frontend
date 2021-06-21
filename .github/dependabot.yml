@@ -7,5 +7,5 @@ updates:
       # Check for npm updates on Sundays
       day: "friday"
     # Labels on pull requests for security and version updates
-    target-branch: "develop"
+    target-branch: "dev"
     # Labels on pull requests for version updates only
