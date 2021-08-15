@@ -14,12 +14,12 @@ phases:
   pre_build:
     commands:
       - echo "Starting pre_build - $(date)"
-
+    
       - echo "Linting Node source code"
-#      - npm run lint
+      - npm run lint
 
       - echo "Testing Node source code"
-#      - npm test
+      - npm test
 
       - echo "Completed pre_build - $(date)"
   build:
@@ -36,13 +36,13 @@ phases:
       - export S3_BUCKET=$(aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query "Stacks[*].Outputs[?OutputKey=='WebBucket'].OutputValue" --output text)
       - bucket_path="s3://${S3_BUCKET}"
       - list_of_synced_files="files_synced.txt"
-      - aws s3 sync dist ${bucket_path} --delete --sse AES256 > ${list_of_synced_files}
+      - aws s3 sync build ${bucket_path} --delete --sse AES256 > ${list_of_synced_files}
 
       - export CLOUD_FRONT_ID=$(aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query "Stacks[*].Outputs[?OutputKey=='CloudFrontId'].OutputValue" --output text)
       - while read file; do file_list="$file_list ${file##*$bucket_path}"; done < ${list_of_synced_files}
-
+      
       - echo ${file_list}
-      - echo
+      - echo 
 
       - aws cloudfront create-invalidation --distribution-id ${CLOUD_FRONT_ID} --paths /\*
 
